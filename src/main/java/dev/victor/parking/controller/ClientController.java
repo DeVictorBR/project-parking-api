@@ -3,11 +3,17 @@ package dev.victor.parking.controller;
 import dev.victor.parking.controller.dto.ClientRequestDto;
 import dev.victor.parking.service.ClientService;
 import dev.victor.parking.service.dto.ClientResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/clients")
@@ -34,5 +40,28 @@ public class ClientController {
     public ResponseEntity<ClientResponseDto> findById(@PathVariable Long id) {
         ClientResponseDto responseDto = clientService.findById(id);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<PagedModel<ClientResponseDto>> findAll(Pageable pageable) {
+        Page<ClientResponseDto> clientsPage = clientService.findAll(pageable);
+
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
+                clientsPage.getSize(),
+                clientsPage.getNumber(),
+                clientsPage.getTotalElements(),
+                clientsPage.getTotalPages()
+        );
+
+        PagedModel<ClientResponseDto> pagedModel = PagedModel.of(clientsPage.getContent(), pageMetadata);
+
+        pagedModel.add(linkTo(methodOn(ClientController.class).findAll(pageable)).withSelfRel());
+        if (clientsPage.hasPrevious()) {
+            pagedModel.add(linkTo(methodOn(ClientController.class).findAll(clientsPage.previousPageable())).withRel("previous"));
+        }
+        if (clientsPage.hasNext()) {
+            pagedModel.add(linkTo(methodOn(ClientController.class).findAll(clientsPage.nextPageable())).withRel("next"));
+        }
+        return ResponseEntity.ok(pagedModel);
     }
 }
