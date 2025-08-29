@@ -71,4 +71,10 @@ public class ClientController {
         ClientResponseDto responseDto = clientService.updatePartial(id, patch);
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        clientService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
