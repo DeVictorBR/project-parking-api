@@ -5,6 +5,8 @@ import dev.victor.parking.entity.Client;
 import dev.victor.parking.exception.ClientNotFoundException;
 import dev.victor.parking.repository.ClientRepository;
 import dev.victor.parking.service.dto.ClientResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,5 +28,10 @@ public class ClientService {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(String.format("Client with id: %d not found", id)));
         return ClientResponseDto.toDto(client);
+    }
+
+    public Page<ClientResponseDto> findAll(Pageable pageable) {
+        Page<Client> clientsPage = clientRepository.findAll(pageable);
+        return clientsPage.map(ClientResponseDto::toDto);
     }
 }
