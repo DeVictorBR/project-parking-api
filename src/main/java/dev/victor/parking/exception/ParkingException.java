@@ -13,10 +13,5 @@ public abstract class ParkingException extends RuntimeException {
         super(cause);
     }
 
-    public ProblemDetail toProblemaDetail() {
-        ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        pd.setTitle("Parking Internal Server Error");
-        pd.setDetail("Contact Parking");
-        return pd;
-    }
+    public abstract ProblemDetail toProblemaDetail();
 }
