@@ -53,6 +53,11 @@ public class ClientService {
         }
     }
 
+    public void delete(Long id) {
+        Client existClient = getClientById(id);
+        clientRepository.delete(existClient);
+    }
+
     private Client getClientById(Long id) {
          return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(String.format("Client with id: %d not found", id)));
