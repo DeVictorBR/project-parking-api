@@ -4,10 +4,7 @@ import dev.victor.parking.controller.dto.ClientRequestDto;
 import dev.victor.parking.service.ClientService;
 import dev.victor.parking.service.dto.ClientResponseDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -23,13 +20,19 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientResponseDto> createClient(@RequestBody ClientRequestDto dto) {
-        ClientResponseDto responseDto = clientService.createClient(dto);
+    public ResponseEntity<ClientResponseDto> create(@RequestBody ClientRequestDto dto) {
+        ClientResponseDto responseDto = clientService.create(dto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(responseDto.clientId())
                 .toUri();
         return ResponseEntity.created(location).body(responseDto);
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ClientResponseDto> findById(@PathVariable Long id) {
+        ClientResponseDto responseDto = clientService.findById(id);
+        return ResponseEntity.ok(responseDto);
     }
 }
