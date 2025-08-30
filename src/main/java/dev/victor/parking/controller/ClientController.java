@@ -4,6 +4,7 @@ import com.github.fge.jsonpatch.JsonPatch;
 import dev.victor.parking.controller.dto.ClientRequestDto;
 import dev.victor.parking.service.ClientService;
 import dev.victor.parking.service.dto.ClientResponseDto;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
@@ -27,7 +28,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientResponseDto> create(@RequestBody ClientRequestDto dto) {
+    public ResponseEntity<ClientResponseDto> create(@RequestBody @Valid ClientRequestDto dto) {
         ClientResponseDto responseDto = clientService.create(dto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
