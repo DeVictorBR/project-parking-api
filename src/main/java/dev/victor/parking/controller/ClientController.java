@@ -3,6 +3,7 @@ package dev.victor.parking.controller;
 import com.github.fge.jsonpatch.JsonPatch;
 import dev.victor.parking.controller.dto.ClientRequestDto;
 import dev.victor.parking.service.ClientService;
+import dev.victor.parking.service.dto.ClientHateoasResponse;
 import dev.victor.parking.service.dto.ClientResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -28,20 +29,28 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientResponseDto> create(@RequestBody @Valid ClientRequestDto dto) {
+    public ResponseEntity<ClientHateoasResponse> create(@RequestBody @Valid ClientRequestDto dto) {
         ClientResponseDto responseDto = clientService.create(dto);
+        ClientHateoasResponse hateoasResponse = new ClientHateoasResponse(responseDto);
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(responseDto.clientId())
                 .toUri();
-        return ResponseEntity.created(location).body(responseDto);
+        hateoasResponse.add(linkTo(methodOn(VehicleController.class).create(null)).withRel("add-vehicle"));
+        return ResponseEntity.created(location).body(hateoasResponse);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ClientResponseDto> findById(@PathVariable Long id) {
+    public ResponseEntity<ClientHateoasResponse> findById(@PathVariable Long id) {
         ClientResponseDto responseDto = clientService.findById(id);
-        return ResponseEntity.ok(responseDto);
+        ClientHateoasResponse hateoasResponse = new ClientHateoasResponse(responseDto);
+        hateoasResponse.add(linkTo(methodOn(ClientController.class).findById(id)).withSelfRel());
+
+        hateoasResponse.add(linkTo(methodOn(ClientController.class).updatePartial(id, null)).withRel("update"));
+        hateoasResponse.add(linkTo(methodOn(ClientController.class).delete(id)).withRel("delete"));
+        return ResponseEntity.ok(hateoasResponse);
     }
 
     @GetMapping
