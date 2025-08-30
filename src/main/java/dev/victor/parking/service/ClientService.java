@@ -58,7 +58,7 @@ public class ClientService {
         clientRepository.delete(existClient);
     }
 
-    private Client getClientById(Long id) {
+    protected Client getClientById(Long id) {
          return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(String.format("Client with id: %d not found", id)));
     }
