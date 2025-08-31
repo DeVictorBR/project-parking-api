@@ -5,6 +5,8 @@ import dev.victor.parking.entity.ContractTemplate;
 import dev.victor.parking.exception.ContractTemplateNotFoundException;
 import dev.victor.parking.repository.ContractTemplateRepository;
 import dev.victor.parking.service.dto.ContractTemplateResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +27,11 @@ public class ContractTemplateService {
     public ContractTemplateResponseDto findById(Long id) {
         ContractTemplate contractTemplate = getContractTemplateById(id);
         return ContractTemplateResponseDto.toDto(contractTemplate);
+    }
+
+    public Page<ContractTemplateResponseDto> findAll(Pageable pageable) {
+        Page<ContractTemplate> contractTemplatesPage = contractTemplateRepository.findAll(pageable);
+        return contractTemplatesPage.map(ContractTemplateResponseDto::toDto);
     }
 
     protected ContractTemplate getContractTemplateById(Long id) {
