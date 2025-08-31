@@ -6,6 +6,8 @@ import dev.victor.parking.entity.Vehicle;
 import dev.victor.parking.exception.VehicleNotFoundException;
 import dev.victor.parking.repository.VehicleRepository;
 import dev.victor.parking.service.dto.VehicleResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +32,11 @@ public class VehicleService {
         Vehicle vehicle = getVehicleById(id);
         Vehicle savedVehicle = vehicleRepository.save(vehicle);
         return VehicleResponseDto.toDto(savedVehicle);
+    }
+
+    public Page<VehicleResponseDto> findAll(Pageable pageable) {
+        Page<Vehicle> vehiclesPage = vehicleRepository.findAll(pageable);
+        return vehiclesPage.map(VehicleResponseDto::toDto);
     }
 
     protected Vehicle getVehicleById(Long id) {
