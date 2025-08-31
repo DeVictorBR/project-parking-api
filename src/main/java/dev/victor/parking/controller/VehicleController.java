@@ -71,4 +71,10 @@ public class VehicleController {
         VehicleResponseDto responseDto = vehicleService.updatePartial(id, patch);
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        vehicleService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
