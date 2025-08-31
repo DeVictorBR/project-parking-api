@@ -71,4 +71,10 @@ public class ContractTemplateController {
         ContractTemplateResponseDto responseDto = contractTemplateService.updatePartial(id, patch);
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        contractTemplateService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
