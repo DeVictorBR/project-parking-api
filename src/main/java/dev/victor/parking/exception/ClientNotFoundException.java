@@ -13,7 +13,7 @@ public class ClientNotFoundException extends ParkingException {
     }
 
     @Override
-    public ProblemDetail toProblemaDetail() {
+    public ProblemDetail toProblemDetail() {
         ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
         pd.setTitle("Client not found");
         pd.setDetail(detail);

@@ -14,7 +14,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(ParkingException.class)
     public ProblemDetail handleParkingException(ParkingException e) {
-        return e.toProblemaDetail();
+        return e.toProblemDetail();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

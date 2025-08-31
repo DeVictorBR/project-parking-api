@@ -1,6 +1,5 @@
 package dev.victor.parking.exception;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 
 public abstract class ParkingException extends RuntimeException {
@@ -13,5 +12,5 @@ public abstract class ParkingException extends RuntimeException {
         super(cause);
     }
 
-    public abstract ProblemDetail toProblemaDetail();
+    public abstract ProblemDetail toProblemDetail();
 }

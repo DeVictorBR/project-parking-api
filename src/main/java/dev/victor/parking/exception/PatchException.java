@@ -13,7 +13,7 @@ public class PatchException extends ParkingException {
     }
 
     @Override
-    public ProblemDetail toProblemaDetail() {
+    public ProblemDetail toProblemDetail() {
         ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         pd.setTitle("Patch operation failed");
         pd.setDetail(detail);
