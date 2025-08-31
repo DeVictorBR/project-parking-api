@@ -8,12 +8,16 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import dev.victor.parking.controller.dto.ClientRequestDto;
 import dev.victor.parking.entity.Client;
 import dev.victor.parking.exception.ClientNotFoundException;
+import dev.victor.parking.exception.DuplicateDataException;
 import dev.victor.parking.exception.PatchException;
 import dev.victor.parking.repository.ClientRepository;
 import dev.victor.parking.service.dto.ClientResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ClientService {
@@ -27,6 +31,17 @@ public class ClientService {
     }
 
     public ClientResponseDto create(ClientRequestDto dto) {
+        List<String> duplicateFields = new ArrayList<>();
+        if (clientRepository.findByCpf(dto.cpf()).isPresent()) {
+            duplicateFields.add("cpf");
+        }
+        if (clientRepository.findByEmail(dto.email()).isPresent()) {
+            duplicateFields.add("email");
+        }
+        if (!duplicateFields.isEmpty()) {
+            throw new DuplicateDataException("Some fields already exist.", duplicateFields);
+        }
+
         Client client = dto.toEntity();
         Client savedClient = clientRepository.save(client);
         return ClientResponseDto.toDto(savedClient);
