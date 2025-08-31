@@ -58,6 +58,11 @@ public class VehicleService {
         }
     }
 
+    public void delete(Long id) {
+        Vehicle existVehicle = getVehicleById(id);
+        vehicleRepository.delete(existVehicle);
+    }
+
     protected Vehicle getVehicleById(Long id) {
         return vehicleRepository.findById(id)
                 .orElseThrow(() -> new VehicleNotFoundException(String.format("Vehicle with id: %d not found", id)));
