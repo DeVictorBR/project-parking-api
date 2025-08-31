@@ -53,6 +53,11 @@ public class ContractTemplateService {
         }
     }
 
+    public void delete(Long id) {
+        ContractTemplate contractTemplate = getContractTemplateById(id);
+        contractTemplateRepository.delete(contractTemplate);
+    }
+
     protected ContractTemplate getContractTemplateById(Long id) {
         return contractTemplateRepository.findById(id)
                 .orElseThrow(() -> new ContractTemplateNotFoundException(String.format("Contract Template with id: %d not found", id)));
