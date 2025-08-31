@@ -1,5 +1,6 @@
 package dev.victor.parking.controller;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import dev.victor.parking.controller.dto.VehicleRequestDto;
 import dev.victor.parking.service.VehicleService;
 import dev.victor.parking.service.dto.VehicleResponseDto;
@@ -62,6 +63,12 @@ public class VehicleController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<VehicleResponseDto> findById(@PathVariable Long id) {
         VehicleResponseDto responseDto = vehicleService.findById(id);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<VehicleResponseDto> updatePartial(@PathVariable Long id, @RequestBody JsonPatch patch) {
+        VehicleResponseDto responseDto = vehicleService.updatePartial(id, patch);
         return ResponseEntity.ok(responseDto);
     }
 }
