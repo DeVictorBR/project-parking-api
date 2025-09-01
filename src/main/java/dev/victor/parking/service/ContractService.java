@@ -9,6 +9,8 @@ import dev.victor.parking.exception.ContractAlreadyExistsException;
 import dev.victor.parking.exception.ContractNotFoundException;
 import dev.victor.parking.repository.ContractRepository;
 import dev.victor.parking.service.dto.ContractResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -55,6 +57,11 @@ public class ContractService {
     public ContractResponseDto findById(Long id) {
         Contract contract = getContractById(id);
         return ContractResponseDto.toDto(contract);
+    }
+
+    public Page<ContractResponseDto> findAll(Pageable pageable) {
+        Page<Contract> contractsPage = contractRepository.findAll(pageable);
+        return contractsPage.map(ContractResponseDto::toDto);
     }
 
     protected Contract getContractById(Long id) {
