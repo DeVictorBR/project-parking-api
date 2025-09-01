@@ -6,6 +6,7 @@ import dev.victor.parking.entity.ContractTemplate;
 import dev.victor.parking.entity.Vehicle;
 import dev.victor.parking.entity.enums.ContractStatus;
 import dev.victor.parking.exception.ContractAlreadyExistsException;
+import dev.victor.parking.exception.ContractNotFoundException;
 import dev.victor.parking.repository.ContractRepository;
 import dev.victor.parking.service.dto.ContractResponseDto;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,13 @@ public class ContractService {
         return ContractResponseDto.toDto(contract);
     }
 
+    public ContractResponseDto findById(Long id) {
+        Contract contract = getContractById(id);
+        return ContractResponseDto.toDto(contract);
+    }
 
+    protected Contract getContractById(Long id) {
+        return contractRepository.findById(id)
+                .orElseThrow(() -> new ContractNotFoundException(String.format("Contract with id: %d not found", id)));
+    }
 }
