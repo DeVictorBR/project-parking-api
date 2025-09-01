@@ -6,12 +6,14 @@ import dev.victor.parking.entity.enums.VehicleType;
 public record VehicleResponseDto(Long id,
                                  Long clientId,
                                  String licensePlate,
-                                 VehicleType vehicleType) {
+                                 VehicleType vehicleType,
+                                 Long contractId) {
     public static VehicleResponseDto toDto(Vehicle vehicle) {
         return new VehicleResponseDto(vehicle.getId(),
                 vehicle.getClient().getId(),
                 vehicle.getLicensePlate(),
-                vehicle.getVehicleType()
+                vehicle.getVehicleType(),
+                vehicle.getContract() != null ? vehicle.getContract().getId() : null
         );
     }
 }
