@@ -1,5 +1,6 @@
 package dev.victor.parking.controller;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import dev.victor.parking.controller.dto.ContractRequestDto;
 import dev.victor.parking.service.ContractService;
 import dev.victor.parking.service.dto.ContractResponseDto;
@@ -64,5 +65,11 @@ public class ContractController {
             pagedModel.add(linkTo(methodOn(ContractController.class).findAll(contractsPage.nextPageable())).withRel("next"));
         }
         return ResponseEntity.ok(pagedModel);
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<ContractResponseDto> updatePartial(@PathVariable Long id, @RequestBody JsonPatch patch) {
+        ContractResponseDto responseDto = contractService.updatePartial(id, patch);
+        return ResponseEntity.ok(responseDto);
     }
 }
