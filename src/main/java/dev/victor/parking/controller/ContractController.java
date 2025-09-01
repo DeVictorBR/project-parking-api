@@ -7,6 +7,8 @@ import dev.victor.parking.service.dto.ContractResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +65,29 @@ public class ContractController {
         }
         if (contractsPage.hasNext()) {
             pagedModel.add(linkTo(methodOn(ContractController.class).findAll(contractsPage.nextPageable())).withRel("next"));
+        }
+        return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping(path = "/due")
+    public ResponseEntity<PagedModel<ContractResponseDto>> findDueContracts(
+            @PageableDefault(sort = "renewalDate", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ContractResponseDto> contractsPage = contractService.findDueContracts(pageable);
+
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
+                contractsPage.getSize(),
+                contractsPage.getNumber(),
+                contractsPage.getTotalElements(),
+                contractsPage.getTotalPages()
+        );
+
+        PagedModel<ContractResponseDto> pagedModel = PagedModel.of(contractsPage.getContent(), pageMetadata);
+        pagedModel.add(linkTo(methodOn(ContractController.class).findDueContracts(pageable)).withSelfRel());
+        if(contractsPage.hasPrevious()) {
+            pagedModel.add(linkTo(methodOn(ContractController.class).findDueContracts(contractsPage.previousPageable())).withRel("previous"));
+        }
+        if (contractsPage.hasNext()) {
+            pagedModel.add(linkTo(methodOn(ContractController.class).findDueContracts(contractsPage.nextPageable())).withRel("next"));
         }
         return ResponseEntity.ok(pagedModel);
     }
