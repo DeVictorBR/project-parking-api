@@ -15,7 +15,7 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(mappedBy = "contract")
     private Vehicle vehicle;
 
     @ManyToOne
@@ -37,4 +37,71 @@ public class Contract {
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
     private List<Payment> payments;
+
+    public Contract() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public ContractTemplate getContractTemplate() {
+        return contractTemplate;
+    }
+
+    public void setContractTemplate(ContractTemplate contractTemplate) {
+        this.contractTemplate = contractTemplate;
+    }
+
+    public Payment getLastPayment() {
+        return lastPayment;
+    }
+
+    public void setLastPayment(Payment lastPayment) {
+        this.lastPayment = lastPayment;
+    }
+
+    public ContractStatus getContractStatus() {
+        return contractStatus;
+    }
+
+    public void setContractStatus(ContractStatus contractStatus) {
+        this.contractStatus = contractStatus;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getRenewalDate() {
+        return renewalDate;
+    }
+
+    public void setRenewalDate(LocalDateTime renewalDate) {
+        this.renewalDate = renewalDate;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
 }
