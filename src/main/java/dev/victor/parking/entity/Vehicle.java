@@ -16,6 +16,10 @@ public class Vehicle {
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @OneToOne(optional = true)
+    @JoinColumn(name = "contract_id", unique = true)
+    private Contract contract;
+
     @Column(name = "license_plate", unique = true, nullable = false)
     private String licensePlate;
 
@@ -55,5 +59,13 @@ public class Vehicle {
 
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
+    }
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 }
