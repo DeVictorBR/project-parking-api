@@ -88,6 +88,16 @@ public class ContractService {
         contractRepository.delete(contract);
     }
 
+    public Page<ContractResponseDto> findDueContracts(Pageable pageable) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime dueDateLimit = now.plusDays(10);
+
+        Page<Contract> dueContractsPage = contractRepository.findByContractStatusAndRenewalDateBetween(
+                ContractStatus.ACTIVE, now, dueDateLimit, pageable
+        );
+        return dueContractsPage.map(ContractResponseDto::toDto);
+    }
+
     protected Contract getContractById(Long id) {
         return contractRepository.findById(id)
                 .orElseThrow(() -> new ContractNotFoundException(String.format("Contract with id: %d not found", id)));
