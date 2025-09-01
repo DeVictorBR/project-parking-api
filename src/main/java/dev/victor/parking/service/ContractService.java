@@ -83,6 +83,11 @@ public class ContractService {
         }
     }
 
+    public void delete(Long id) {
+        Contract contract = getContractById(id);
+        contractRepository.delete(contract);
+    }
+
     protected Contract getContractById(Long id) {
         return contractRepository.findById(id)
                 .orElseThrow(() -> new ContractNotFoundException(String.format("Contract with id: %d not found", id)));
