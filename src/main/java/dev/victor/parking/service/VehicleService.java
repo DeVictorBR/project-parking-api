@@ -66,4 +66,8 @@ public class VehicleService {
         return vehicleRepository.findById(id)
                 .orElseThrow(() -> new VehicleNotFoundException(String.format("Vehicle with id: %d not found", id)));
     }
+
+    protected void save(Vehicle vehicle) {
+        vehicleRepository.save(vehicle);
+    }
 }
