@@ -38,8 +38,7 @@ public class VehicleService {
 
     public VehicleResponseDto findById(Long id) {
         Vehicle vehicle = getVehicleById(id);
-        Vehicle savedVehicle = vehicleRepository.save(vehicle);
-        return VehicleResponseDto.toDto(savedVehicle);
+        return VehicleResponseDto.toDto(vehicle);
     }
 
     public Page<VehicleResponseDto> findAll(Pageable pageable) {
