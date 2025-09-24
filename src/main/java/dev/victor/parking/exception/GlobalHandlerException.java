@@ -17,6 +17,11 @@ public class GlobalHandlerException {
         return e.toProblemDetail();
     }
 
+    @ExceptionHandler(AbacatePayException.class)
+    public ProblemDetail handleAbacatePayException(AbacatePayException e) {
+        return e.toProblemDetail();
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<InvalidParamDto> invalidParams = e.getFieldErrors()
