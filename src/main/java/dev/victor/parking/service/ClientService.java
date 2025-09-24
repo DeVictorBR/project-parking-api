@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import dev.victor.parking.client.dto.CustomerDataRequestDto;
 import dev.victor.parking.controller.dto.ClientRequestDto;
 import dev.victor.parking.entity.Client;
 import dev.victor.parking.exception.ClientNotFoundException;
@@ -24,10 +25,13 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
     private final ObjectMapper objectMapper;
+    private final CustomerClientService customerClientService;
 
-    public ClientService(ClientRepository clientRepository, ObjectMapper objectMapper) {
+
+    public ClientService(ClientRepository clientRepository, ObjectMapper objectMapper, CustomerClientService customerClientService) {
         this.clientRepository = clientRepository;
         this.objectMapper = objectMapper;
+        this.customerClientService = customerClientService;
     }
 
     public ClientResponseDto create(ClientRequestDto dto) {
@@ -44,6 +48,13 @@ public class ClientService {
 
         Client client = dto.toEntity();
         Client savedClient = clientRepository.save(client);
+        var response = customerClientService.createCustomer(new CustomerDataRequestDto(
+                client.getName(),
+                client.getPhoneNumber(),
+                client.getEmail(),
+                client.getCpf()
+        ));
+        System.out.println(response);
         return ClientResponseDto.toDto(savedClient);
     }
 
